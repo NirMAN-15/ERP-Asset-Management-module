@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AssetFlow ERP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#1F2937;--navy2:#2E3A4D;--navy3:#475569;
+  --indigo:#4F46E5;--indigo2:#818CF8;--indigo3:#E0E7FF;
+  --teal:#0F766E;--amber:#F59E0B;--amber2:#FBBF24;--rose:#E11D48;--rose2:#FB7185;--emerald:#16A34A;--emerald2:#4ADE80;
+  --red-soft:#FFF1F2;--green-soft:#ECFDF5;--yellow-soft:#FFFBEB;
+  --text:#172033;--text2:#475569;--text3:#64748B;
+  --border:#E8EEF4;--bg:#F5F7F9;--white:#FFFFFF;
+  --surface:rgba(255,255,255,.88);--surface-strong:#ffffff;--sidebar-start:#111827;--sidebar-end:#1f2937;
+  --radius:12px;--radius-lg:16px;--radius-xl:22px;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+  --shadow-lg:0 18px 45px rgba(15,23,42,.10);
+  --shadow-soft:0 8px 20px rgba(225,29,72,.12),0 8px 22px rgba(22,163,74,.08),0 8px 22px rgba(245,158,11,.08);
+}
+body{font-family:'Inter',sans-serif;background:radial-gradient(circle at top left, rgba(244,63,94,.08), transparent 26%), radial-gradient(circle at top right, rgba(16,185,129,.08), transparent 20%), linear-gradient(135deg,#f8fafc 0%,#f3f6fb 50%,#fffaf4 100%);color:var(--text);display:flex;min-height:100vh;font-size:14px;transition:.25s ease}
+body.dark-mode{
+  --navy:#0b1120;--navy2:#111827;--navy3:#1f2937;
+  --indigo:#8b5cf6;--indigo2:#a78bfa;--indigo3:#312e81;
+  --teal:#2dd4bf;--amber:#fbbf24;--amber2:#f59e0b;--rose:#fb7185;--rose2:#f43f5e;--emerald:#4ade80;--emerald2:#22c55e;
+  --red-soft:#2a1117;--green-soft:#082f20;--yellow-soft:#2c220f;
+  --text:#edf2ff;--text2:#dfeaf8;--text3:#a7b7cf;
+  --border:#243044;--bg:#0f172a;--white:#111827;
+  --surface:rgba(15,23,42,.85);--surface-strong:#111827;--sidebar-start:#020817;--sidebar-end:#111827;
+  background:radial-gradient(circle at top left, rgba(251,113,133,.08), transparent 24%), radial-gradient(circle at top right, rgba(74,222,128,.08), transparent 30%), linear-gradient(135deg,#020817 0%,#0f172a 45%,#111827 100%);
+}
+
+/* SIDEBAR */
+.sidebar{width:260px;background:linear-gradient(180deg,var(--sidebar-start) 0%,var(--sidebar-end) 100%);min-height:100vh;position:fixed;top:0;left:0;display:flex;flex-direction:column;z-index:100;transition:.3s;box-shadow:12px 0 30px rgba(17,24,39,.12)}
+.sidebar-header{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#f59e0b,#ef4444);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 8px 18px rgba(245,158,11,.35)}
+.logo-text{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.logo-sub{font-size:10px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-top:1px}
+
+.nav-section{padding:20px 12px 8px;flex:1}
+.nav-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.72);letter-spacing:1px;text-transform:uppercase;padding:0 8px;margin-bottom:6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;color:rgba(255,255,255,.7);font-size:13px;font-weight:600;cursor:pointer;transition:.2s ease;margin-bottom:2px;position:relative}
+.nav-item:hover{background:#3730A3;color:#fff;transform:translateX(1px);border:1px solid rgba(255,255,255,.14)}
+.nav-item.active{background:linear-gradient(90deg,rgba(245,158,11,.16),rgba(34,197,94,.12),rgba(255,255,255,.02));color:#fff;border:1px solid rgba(255,255,255,.06)}
+.nav-item.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:linear-gradient(180deg,var(--amber2),var(--emerald2));border-radius:2px}
+.nav-icon{font-size:16px;width:20px;text-align:center}
+.nav-badge{margin-left:auto;background:linear-gradient(135deg,var(--rose),#fb7185);color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:20px;box-shadow:0 6px 12px rgba(225,29,72,.2)}
+
+.sidebar-footer{padding:16px 12px;border-top:1px solid rgba(255,255,255,.06)}
+.user-card{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;cursor:pointer}
+.user-card:hover{background:#334155;border:1px solid rgba(255,255,255,.14)}
+.avatar{width:34px;height:34px;background:linear-gradient(135deg,#6366F1,#EC4899);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;flex-shrink:0}
+.user-name{font-size:13px;font-weight:600;color:#fff}
+.user-role{font-size:11px;color:var(--text3)}
+.user-status{margin-left:auto;width:8px;height:8px;background:var(--emerald);border-radius:50%;box-shadow:0 0 0 2px rgba(16,185,129,.2)}
+
+/* MAIN */
+.main{margin-left:260px;flex:1;min-height:100vh}
+.topbar{background:var(--surface);backdrop-filter:blur(8px);border-bottom:1px solid rgba(148,163,184,.2);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 8px 18px rgba(15,23,42,.02)}
+.page-title{font-size:18px;font-weight:800;color:var(--text);letter-spacing:-.3px}
+.page-sub{font-size:12px;color:var(--text2);margin-top:1px}
+.topbar-actions{display:flex;align-items:center;gap:12px}
+.theme-toggle{display:inline-flex;align-items:center;gap:8px;min-width:92px;justify-content:center;background:linear-gradient(180deg,#fff,#f8fafc);border:1px solid var(--border);color:var(--text2);box-shadow:0 6px 12px rgba(15,23,42,.04)}
+body.dark-mode .theme-toggle{background:linear-gradient(180deg,#162033,#0f172a);color:var(--text);border-color:var(--border)}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--radius);font-size:13px;font-weight:700;border:none;cursor:pointer;transition:.2s ease;font-family:'Inter',sans-serif;letter-spacing:.01em}
+.btn-primary{background:linear-gradient(135deg,var(--indigo),#7C3AED);color:#fff;box-shadow:0 10px 18px rgba(79,70,229,.28)}
+.btn-primary:hover{background:linear-gradient(135deg,#4338CA,#6D28D9);transform:translateY(-2px);box-shadow:0 14px 24px rgba(79,70,229,.35)}
+.btn-ghost{background:linear-gradient(180deg,#fff,#f9fafb);color:var(--text2);border:1px solid var(--border);box-shadow:0 4px 10px rgba(15,23,42,.03)}
+.btn-ghost:hover{background:linear-gradient(180deg,#fff,#f1f5f9);color:var(--text);transform:translateY(-1px)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.notif-btn{width:38px;height:38px;background:linear-gradient(180deg,#fff,#f8fafc);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:16px;box-shadow:0 6px 12px rgba(15,23,42,.04)}
+.notif-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--rose);border-radius:50%;border:1.5px solid var(--white)}
+.notification-panel{position:absolute;top:58px;right:14px;width:360px;background:var(--white);border:1px solid var(--border);border-radius:16px;box-shadow:0 24px 40px rgba(15,23,42,.16);overflow:hidden;z-index:120;display:none}
+.notification-panel.open{display:block}
+.notif-header{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#fff,#f8fafc)}
+.notif-header strong{font-size:14px;color:var(--text)}
+.notif-header small{display:block;color:var(--text2);margin-top:2px}
+.notif-list{max-height:360px;overflow-y:auto}
+.notif-item{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid #eef2f7;cursor:pointer;transition:.15s;background:var(--white)}
+.notif-item:hover{background:#92400E;border-left:3px solid #FBBF24;padding-left:13px}
+.notif-item.unread{background:linear-gradient(90deg, rgba(245,158,11,.08), rgba(255,255,255,0));}
+.notif-emoji{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.notif-item-content{flex:1;min-width:0}
+.notif-item-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.notif-item-text{font-size:11px;line-height:1.5;color:var(--text2)}
+.notif-item-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;font-size:10px;color:var(--text3)}
+.notif-severity{padding:3px 7px;border-radius:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:9px}
+body.dark-mode .notification-panel,
+body.dark-mode .notification-modal,
+body.dark-mode .notif-item,
+body.dark-mode .notif-header,
+body.dark-mode .search-bar,
+body.dark-mode .theme-toggle,
+body.dark-mode .btn-ghost,
+body.dark-mode .notif-btn{background:var(--white);color:var(--text)}
+body.dark-mode .notif-item-text,
+body.dark-mode .notif-item-meta,
+body.dark-mode .notif-header small,
+body.dark-mode .notification-meta,
+body.dark-mode .notification-modal p,
+body.dark-mode .search-bar,
+body.dark-mode .tab,
+body.dark-mode .kpi-label,
+body.dark-mode .section-sub,
+body.dark-mode .mini-note,
+body.dark-mode .bar-label,
+body.dark-mode .bar-val,
+body.dark-mode .timeline-meta,
+body.dark-mode .asset-meta,
+body.dark-mode .asset-value-sub,
+body.dark-mode .legend-item,
+body.dark-mode .form-group label,
+body.dark-mode .user-role,
+body.dark-mode .page-sub,
+body.dark-mode .section-title,
+body.dark-mode .kpi-trend.neutral{color:var(--text2)}
+body.dark-mode .notif-item-title,
+body.dark-mode .notification-modal-title,
+body.dark-mode .user-name,
+body.dark-mode .page-title,
+body.dark-mode .kpi-value,
+body.dark-mode .asset-name,
+body.dark-mode .timeline-title,
+body.dark-mode .insight-text strong,
+body.dark-mode .modal-title,
+body.dark-mode .nav-item,
+body.dark-mode .logo-text{color:var(--text)}
+body.dark-mode .search-bar input{color:var(--text);background:transparent}
+body.dark-mode .search-bar{border-color:var(--border)}
+body.dark-mode .notif-header{background:linear-gradient(180deg,#101b2d,#0f172a)}
+body.dark-mode .notif-item:hover{background:#78350F;border-left:3px solid #FBBF24;padding-left:13px}
+body.dark-mode .notif-item.unread{background:linear-gradient(90deg, rgba(245,158,11,.12), rgba(15,23,42,0.2));}
+body.dark-mode .tab.active{background:var(--white);color:var(--text)}
+
+body.dark-mode .notif-item:hover .notif-item-title,
+body.dark-mode .notif-item:hover .notif-item-text,
+body.dark-mode .notif-item:hover .notif-item-meta,
+body.light-mode .notif-item:hover .notif-item-title,
+body.light-mode .notif-item:hover .notif-item-text,
+body.light-mode .notif-item:hover .notif-item-meta,
+.notif-item:hover .notif-item-title,
+.notif-item:hover .notif-item-text,
+.notif-item:hover .notif-item-meta{color:#fff}
+.notif-severity.high{background:#FEE2E2;color:#991B1B}
+.notif-severity.medium{background:#FEF3C7;color:#92400E}
+.notif-severity.low{background:#DCFCE7;color:#166534}
+.notification-modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;z-index:220;backdrop-filter:blur(4px)}
+.notification-modal-overlay.open{display:flex}
+.notification-modal{width:480px;max-width:calc(100vw - 28px);background:var(--white);border-radius:20px;padding:22px;box-shadow:0 22px 50px rgba(15,23,42,.18)}
+.notification-modal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.notification-modal-title{font-size:18px;font-weight:800;color:var(--text);margin-top:8px}
+.notification-badge{display:inline-block;padding:4px 8px;border-radius:12px;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.notification-badge.high{background:#FEE2E2;color:#991B1B}
+.notification-badge.medium{background:#FEF3C7;color:#92400E}
+.notification-badge.low{background:#DCFCE7;color:#166534}
+.notification-meta{font-size:11px;color:var(--text2);margin-top:10px}
+.notification-modal p{margin-top:16px;font-size:13px;line-height:1.7;color:var(--text2)}
+.notification-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+
+.content{padding:28px 32px}
+
+/* PAGE SECTIONS */
+.page{display:none}
+.page.active{display:block}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.kpi-card{background:linear-gradient(180deg,var(--surface-strong),var(--bg));border:1px solid rgba(148,163,184,.24);border-radius:var(--radius-lg);padding:20px;position:relative;overflow:hidden;transition:.25s ease;box-shadow:0 10px 22px rgba(15,23,42,.04)}
+body.dark-mode .kpi-card{box-shadow:0 10px 28px rgba(15,23,42,.22)}
+.kpi-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
+.kpi-accent{position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.kpi-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.kpi-icon-wrap{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+.kpi-trend{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.kpi-trend.up{background:linear-gradient(135deg,#DCFCE7,#BBF7D0);color:#166534}
+.kpi-trend.down{background:linear-gradient(135deg,#FEE2E2,#FECACA);color:#991B1B}
+.kpi-trend.neutral{background:#F8FAFC;color:var(--text2)}
+body.dark-mode .kpi-trend.neutral{color:#334155}
+.kpi-value{font-size:28px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1}
+.kpi-label{font-size:12px;color:var(--text2);margin-top:4px;font-weight:600}
+
+/* SECTION */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-size:15px;font-weight:800;color:var(--text)}
+.section-sub{font-size:12px;color:var(--text2);margin-top:1px}
+
+/* GRID LAYOUT */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid-3{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+.mini-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}
+.mini-stat{background:linear-gradient(180deg,#F8FAFC,#FFFFFF);border:1px solid rgba(148,163,184,.22);border-radius:var(--radius);padding:14px;box-shadow:0 8px 18px rgba(15,23,42,.02)}
+body.dark-mode .mini-stat{background:linear-gradient(180deg,#1e293b,#172033);border-color:#334155}
+.mini-label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);margin-bottom:8px}
+.mini-value{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.8px;line-height:1.1}
+.mini-note{margin-top:6px;font-size:11px;color:var(--text2)}
+.card{background:linear-gradient(180deg,var(--surface-strong),var(--bg));border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;box-shadow:0 10px 22px rgba(15,23,42,.04)}
+body.dark-mode .card{box-shadow:0 10px 26px rgba(2,6,23,.25)}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead th{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg)}
+tbody td{padding:12px 14px;border-bottom:1px solid #F1F5F9;font-size:13px;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#166534;color:#fff;border-bottom-color:#15803D}
+
+.asset-row:hover{background:#166534;border-radius:10px;padding-left:10px;padding-right:10px}
+.asset-row:hover .asset-name,.asset-row:hover .asset-meta,.asset-row:hover .asset-value,.asset-row:hover .asset-value-sub{color:#fff}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.02em;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.badge-green{background:linear-gradient(135deg,#DCFCE7,#BBF7D0);color:#166534}
+.badge-amber{background:linear-gradient(135deg,#FEF3C7,#FDE68A);color:#92400E}
+.badge-red{background:linear-gradient(135deg,#FEE2E2,#FECACA);color:#991B1B}
+.badge-blue{background:linear-gradient(135deg,#DBEAFE,#BFDBFE);color:#1E40AF}
+.badge-purple{background:linear-gradient(135deg,#E0E7FF,#C7D2FE);color:#3730A3}
+.badge-gray{background:linear-gradient(135deg,#F1F5F9,#E2E8F0);color:#334155}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+/* ASSET LIST */
+.asset-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid #F1F5F9}
+.asset-row:last-child{border-bottom:none}
+.asset-thumb{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.asset-info{flex:1;min-width:0}
+.asset-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.asset-meta{font-size:11px;color:var(--text2);margin-top:2px}
+.asset-value{text-align:right;font-size:13px;font-weight:700;color:var(--text)}
+.asset-value-sub{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* MAINTENANCE TIMELINE */
+.timeline-item{display:flex;gap:14px;padding:12px 0;position:relative}
+.timeline-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.timeline-line{position:absolute;left:4px;top:24px;bottom:0;width:2px;background:var(--border)}
+.timeline-title{font-size:13px;font-weight:600;color:var(--text)}
+.timeline-meta{font-size:11px;color:var(--text2);margin-top:3px;line-height:1.5}
+
+/* AI INSIGHTS */
+.insight-card{background:linear-gradient(135deg,#FFF1F2,#FEF2F2 45%,#F8FAFC 100%);border:1px solid rgba(251,113,133,.28);border-radius:12px;padding:14px;margin-bottom:10px;position:relative;overflow:hidden;box-shadow:0 10px 15px rgba(225,29,72,.06)}
+body.dark-mode .insight-card{background:#1e293b!important;border-color:#475569!important}
+body.dark-mode .insight-priority{color:var(--rose)!important}
+body.dark-mode .insight-priority[style*="#D97706"]{color:#FBBF24!important}
+body.dark-mode .insight-priority[style*="#059669"]{color:#4ADE80!important}
+.insight-card::before{content:'✦';position:absolute;right:14px;top:10px;font-size:16px;color:var(--rose);opacity:.55}
+.insight-priority{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+.insight-text{font-size:12px;color:var(--text2);line-height:1.5}
+.insight-text strong{color:var(--text);font-weight:700}
+
+/* PROGRESS BAR */
+.progress-wrap{margin-bottom:14px}
+.progress-header{display:flex;justify-content:space-between;margin-bottom:6px;font-size:12px}
+.progress-bar{height:6px;background:var(--bg);border-radius:3px;overflow:hidden;border:1px solid var(--border)}
+.progress-fill{height:100%;border-radius:3px;transition:width .6s ease}
+
+/* FORM STYLES */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group{display:flex;flex-direction:column;gap:5px}
+.form-group label{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
+.form-group input,.form-group select,.form-group textarea{padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:var(--white);transition:.15s;outline:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+.form-full{grid-column:1/-1}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:var(--radius-xl);padding:28px;width:540px;max-width:calc(100vw - 32px);max-height:85vh;overflow-y:auto;box-shadow:0 25px 60px rgba(0,0,0,.15)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:17px;font-weight:700;color:var(--text)}
+.modal-close{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--border)}
+
+/* CHARTS */
+.bar-chart{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;border-radius:6px 6px 0 0;transition:.6s}
+.bar-label{font-size:10px;color:var(--text2);text-align:center;line-height:1.2}
+.bar-val{font-size:10px;font-weight:600;color:var(--text2)}
+
+/* DONUT */
+.donut-wrap{display:flex;align-items:center;gap:20px}
+.donut-legend{display:flex;flex-direction:column;gap:8px}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:12px}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.legend-val{font-weight:600;margin-left:auto;color:var(--text)}
+
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin-bottom:20px;width:fit-content}
+.tab{padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;color:var(--text2);transition:.15s}
+.tab.active{background:var(--white);color:var(--text);box-shadow:var(--shadow)}
+.tab:hover:not(.active){color:var(--text)}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:40px 20px;color:var(--text2)}
+.empty-icon{font-size:40px;margin-bottom:10px;opacity:.5}
+.empty-text{font-size:13px}
+
+/* STATUS PULSE */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse{animation:pulse 2s ease infinite}
+@keyframes countUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.count-anim{animation:countUp .5s ease forwards}
+
+/* SEARCH BAR */
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:7px 12px;font-size:13px;color:var(--text2);width:220px}
+.search-bar input{border:none;background:transparent;outline:none;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);width:100%}
+body.dark-mode .search-bar input::placeholder{color:var(--text3)}
+body.light-mode .search-bar input::placeholder{color:var(--text3)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{width:60px}
+  .logo-text,.logo-sub,.nav-item span,.user-name,.user-role,.nav-label,.nav-badge{display:none}
+  .main{margin-left:60px}
+  .logo-icon{margin:0 auto}
+  .nav-item{justify-content:center;padding:10px}
+  .nav-item::before{display:none}
+  .user-card{justify-content:center}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .content{padding:16px}
+  .topbar{padding:0 16px}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <div>
+        <div class="logo-text">AssetFlow</div>
+        <div class="logo-sub">ERP Suite</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active" onclick="showPage('dashboard',this)">
+      <span class="nav-icon">📊</span><span>Dashboard</span>
+    </div>
+
+    <div class="nav-label" style="margin-top:14px">Manage</div>
+    <div class="nav-item" onclick="showPage('assets',this)">
+      <span class="nav-icon">📦</span><span>Assets</span>
+    </div>
+    <div class="nav-item" onclick="showPage('employees',this)">
+      <span class="nav-icon">👥</span><span>Employees</span>
+    </div>
+    <div class="nav-item" onclick="showPage('procurement',this)">
+      <span class="nav-icon">🧾</span><span>Procurement</span>
+    </div>
+    <div class="nav-item" onclick="showPage('maintenance',this)">
+      <span class="nav-icon">🔧</span><span>Maintenance</span>
+      <span class="nav-badge">3</span>
+    </div>
+    <div class="nav-item" onclick="showPage('requests',this)">
+      <span class="nav-icon">📋</span><span>Requests</span>
+      <span class="nav-badge pulse">2</span>
+    </div>
+
+    <div class="nav-label" style="margin-top:14px">Analytics</div>
+    <div class="nav-item" onclick="showPage('reports',this)">
+      <span class="nav-icon">📈</span><span>Reports</span>
+    </div>
+    <div class="nav-item" onclick="showPage('depreciation',this)">
+      <span class="nav-icon">💹</span><span>Depreciation</span>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="avatar">AD</div>
+      <div>
+        <div class="user-name">Admin User</div>
+        <div class="user-role">Administrator</div>
+      </div>
+      <div class="user-status"></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="topbar-title">Dashboard</div>
+      <div class="page-sub" id="topbar-sub">Thursday, June 11, 2026</div>
+    </div>
+    <div class="topbar-actions" style="position:relative">
+      <div class="search-bar">
+        <span style="font-size:14px;flex-shrink:0">🔍</span>
+        <input type="text" placeholder="Search assets…" id="global-search" oninput="handleSearch(this.value)">
+      </div>
+      <button class="btn btn-ghost btn-sm theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-label">Dark</span>
+      </button>
+      <div class="notif-btn" id="notif-btn" title="Notifications" onclick="toggleNotifications(event)">🔔<div class="notif-dot"></div></div>
+      <div class="notification-panel" id="notification-panel">
+        <div class="notif-header">
+          <div>
+            <strong>Notifications</strong>
+            <small id="notification-summary">3 unread</small>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="markAllRead()">Mark all read</button>
+        </div>
+        <div class="notif-list" id="notification-list"></div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="openModal('add-asset-modal')">+ Add Asset</button>
+    </div>
+  </div>
+
+  <div class="notification-modal-overlay" id="notification-modal-overlay" onclick="if(event.target===this) closeNotificationModal()">
+    <div class="notification-modal">
+      <div class="notification-modal-header">
+        <div>
+          <div class="notification-badge high" id="popup-severity">High Priority</div>
+          <div class="notification-modal-title" id="popup-title">Maintenance alert</div>
+        </div>
+        <button class="modal-close" onclick="closeNotificationModal()">✕</button>
+      </div>
+      <div class="notification-meta" id="popup-meta">Toyota Hilux • 2 mins ago</div>
+      <p id="popup-message">The scheduled maintenance for Toyota Hilux is overdue and requires immediate review.</p>
+      <div class="notification-actions">
+        <button class="btn btn-primary btn-sm" onclick="closeNotificationModal();showToast('Action scheduled')">Review</button>
+        <button class="btn btn-ghost btn-sm" onclick="closeNotificationModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ============ DASHBOARD ============ -->
+    <div class="page active" id="page-dashboard">
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--indigo)"></div>
+          <div class="kpi-header">
+            <div class="kpi-icon-wrap" style="background:#EEF2FF">📦</div>
+            <span class="kpi-trend up">+3 this month</span>
+          </div>
+          <div class="kpi-value count-anim" data-target="24">24</div>
+          <div class="kpi-label">Total Assets</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--emerald)"></div>
+          <div class="kpi-header">
+            <div class="kpi-icon-wrap" style="background:#D1FAE5">💰</div>
+            <span class="kpi-trend up">+2.4%</span>
+          </div>
+          <div class="kpi-value count-anim">Rs. 13.2M</div>
+          <div class="kpi-label">Total Asset Value</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--amber)"></div>
+          <div class="kpi-header">
+            <div class="kpi-icon-wrap" style="background:#FEF3C7">🔧</div>
+            <span class="kpi-trend down">3 overdue</span>
+          </div>
+          <div class="kpi-value count-anim">5</div>
+          <div class="kpi-label">Maintenance Due</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--teal)"></div>
+          <div class="kpi-header">
+            <div class="kpi-icon-wrap" style="background:#CCFBF1">👤</div>
+            <span class="kpi-trend neutral">16 available</span>
+          </div>
+          <div class="kpi-value count-anim">8</div>
+          <div class="kpi-label">Assigned Assets</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--rose)"></div>
+          <div class="kpi-header">
+            <div class="kpi-icon-wrap" style="background:#FFF1F2">📋</div>
+            <span class="kpi-trend neutral">2 pending</span>
+          </div>
+          <div class="kpi-value count-anim">2</div>
+          <div class="kpi-label">Open Requests</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:#8B5CF6"></div>
+          <div class="kpi-header">
+            <div class="kpi-icon-wrap" style="background:#F5F3FF">📉</div>
+            <span class="kpi-trend down">-Rs. 1.2M</span>
+          </div>
+          <div class="kpi-value count-anim">Rs. 2.8M</div>
+          <div class="kpi-label">YTD Depreciation</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:20px">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Operational Overview</div>
+            <div class="section-sub">Procurement, lifecycle, and asset health</div>
+          </div>
+        </div>
+        <div class="mini-grid">
+          <div class="mini-stat">
+            <div class="mini-label">Budget Used</div>
+            <div class="mini-value">Rs. 5.4M</div>
+            <div class="mini-note">72% of annual cap</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-label">Warranty Coverage</div>
+            <div class="mini-value">87%</div>
+            <div class="mini-note">11 assets still covered</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-label">Lifecycle Risk</div>
+            <div class="mini-value">Low</div>
+            <div class="mini-note">2 assets nearing retirement</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <!-- Left col: activity + categories -->
+        <div>
+          <!-- Asset utilization by category -->
+          <div class="card" style="margin-bottom:20px">
+            <div class="section-header">
+              <div>
+                <div class="section-title">Asset Utilization</div>
+                <div class="section-sub">By category this quarter</div>
+              </div>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-header">
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500"><span>🚗</span> Vehicles</span>
+                <span style="font-size:12px;font-weight:700;color:var(--indigo)">87%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:87%;background:var(--indigo)"></div></div>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-header">
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500"><span>💻</span> Computers</span>
+                <span style="font-size:12px;font-weight:700;color:var(--teal)">74%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:74%;background:var(--teal)"></div></div>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-header">
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500"><span>🔧</span> Equipment</span>
+                <span style="font-size:12px;font-weight:700;color:var(--amber)">52%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:52%;background:var(--amber)"></div></div>
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-header">
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500"><span>🪑</span> Furniture</span>
+                <span style="font-size:12px;font-weight:700;color:var(--emerald)">63%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:63%;background:var(--emerald)"></div></div>
+            </div>
+            <div class="progress-wrap" style="margin-bottom:0">
+              <div class="progress-header">
+                <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500"><span>📱</span> Electronics</span>
+                <span style="font-size:12px;font-weight:700;color:#8B5CF6">91%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:91%;background:#8B5CF6"></div></div>
+            </div>
+          </div>
+
+          <!-- Recent activity -->
+          <div class="card">
+            <div class="section-header">
+              <div class="section-title">Recent Activity</div>
+              <button class="btn btn-ghost btn-sm">View all</button>
+            </div>
+            <div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--emerald)"></div>
+                <div class="timeline-line"></div>
+                <div>
+                  <div class="timeline-title">Toyota Hilux — maintenance completed</div>
+                  <div class="timeline-meta">By Toyota Service · Rs. 25,000 · 2 days ago</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--indigo)"></div>
+                <div class="timeline-line"></div>
+                <div>
+                  <div class="timeline-title">MacBook Pro assigned to Jane Smith</div>
+                  <div class="timeline-meta">Operations Dept · 4 days ago</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--amber)"></div>
+                <div class="timeline-line"></div>
+                <div>
+                  <div class="timeline-title">Laptop request submitted by Saman Kumara</div>
+                  <div class="timeline-meta">High urgency · awaiting approval · 1 week ago</div>
+                </div>
+              </div>
+              <div class="timeline-item" style="padding-bottom:0">
+                <div class="timeline-dot" style="background:var(--rose)"></div>
+                <div>
+                  <div class="timeline-title">Nissan Van — maintenance overdue</div>
+                  <div class="timeline-meta">Last serviced Nov 2023 · action required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right col: AI insights + quick stats -->
+        <div>
+          <div class="card" style="margin-bottom:20px">
+            <div class="section-header">
+              <div>
+                <div class="section-title">🤖 AI Insights</div>
+                <div class="section-sub">Powered by AssetFlow AI</div>
+              </div>
+            </div>
+            <div class="insight-card">
+              <div class="insight-priority">🔴 High Priority</div>
+              <div class="insight-text"><strong>Toyota Hilux</strong> has retained only 18% of its original value. Recommend scheduling replacement with a budget of <strong>Rs. 6.8M</strong>.</div>
+            </div>
+            <div class="insight-card" style="background:linear-gradient(135deg,#FFF7ED,#FFFBEB);border-color:#FDE68A">
+              <div class="insight-priority" style="color:#D97706">🟡 Medium Priority</div>
+              <div class="insight-text"><strong>Dell XPS Laptop</strong> maintenance costs have reached 48% of purchase price. Consider upgrade next budget cycle.</div>
+            </div>
+            <div class="insight-card" style="background:linear-gradient(135deg,#F0FDF4,#ECFDF5);border-color:#A7F3D0">
+              <div class="insight-priority" style="color:#059669">🟢 Prediction</div>
+              <div class="insight-text"><strong>3 assets</strong> will require maintenance within the next 30 days. Total estimated cost: <strong>Rs. 45,000</strong>.</div>
+            </div>
+          </div>
+
+          <!-- Value breakdown donut chart -->
+          <div class="card">
+            <div class="section-title" style="margin-bottom:16px">Value by Category</div>
+            <div class="donut-wrap">
+              <svg width="90" height="90" viewBox="0 0 90 90">
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#EEF2FF" stroke-width="12"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#6366F1" stroke-width="12" stroke-dasharray="107 113" stroke-dashoffset="28" stroke-linecap="round"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#14B8A6" stroke-width="12" stroke-dasharray="64 156" stroke-dashoffset="-79" stroke-linecap="round"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#F59E0B" stroke-width="12" stroke-dasharray="38 182" stroke-dashoffset="-143" stroke-linecap="round"/>
+                <circle cx="45" cy="45" r="35" fill="none" stroke="#10B981" stroke-width="12" stroke-dasharray="24 196" stroke-dashoffset="-181" stroke-linecap="round"/>
+                <text x="45" y="49" text-anchor="middle" font-size="12" font-weight="700" fill="#0F172A" font-family="Inter">24</text>
+              </svg>
+              <div class="donut-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#6366F1"></div>Vehicles<span class="legend-val">48%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#14B8A6"></div>Computers<span class="legend-val">29%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div>Equipment<span class="legend-val">14%</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>Furniture<span class="legend-val">9%</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ ASSETS ============ -->
+    <div class="page" id="page-assets">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div class="tabs">
+          <div class="tab active" onclick="filterAssets('all',this)">All Assets</div>
+          <div class="tab" onclick="filterAssets('available',this)">Available</div>
+          <div class="tab" onclick="filterAssets('assigned',this)">Assigned</div>
+          <div class="tab" onclick="filterAssets('maintenance',this)">Maintenance</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-asset-modal')">+ New Asset</button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table id="assets-table">
+            <thead>
+              <tr>
+                <th>Asset</th>
+                <th>Code</th>
+                <th>Category</th>
+                <th>Purchase Cost</th>
+                <th>Current Value</th>
+                <th>Status</th>
+                <th>Assigned To</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="assets-tbody">
+              <tr data-status="assigned">
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="font-size:22px">🚗</div><div><div style="font-weight:600">Toyota Hilux</div><div style="font-size:11px;color:var(--text2)">Supplier: Toyota Lanka</div></div></div></td>
+                <td><code style="background:var(--bg);padding:2px 6px;border-radius:5px;font-size:11px">VEH-001</code></td>
+                <td><span class="badge badge-purple">Vehicle</span></td>
+                <td style="font-weight:600">Rs. 8,500,000</td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 1,530,000</td>
+                <td><span class="badge badge-amber">Assigned</span></td>
+                <td>Jane Smith</td>
+                <td><button class="btn btn-ghost btn-sm" onclick="viewAsset('VEH-001')">View</button></td>
+              </tr>
+              <tr data-status="assigned">
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="font-size:22px">💻</div><div><div style="font-weight:600">Dell XPS Laptop</div><div style="font-size:11px;color:var(--text2)">Supplier: Dell Sri Lanka</div></div></div></td>
+                <td><code style="background:var(--bg);padding:2px 6px;border-radius:5px;font-size:11px">COM-001</code></td>
+                <td><span class="badge badge-blue">Computer</span></td>
+                <td style="font-weight:600">Rs. 250,000</td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 87,500</td>
+                <td><span class="badge badge-amber">Assigned</span></td>
+                <td>John Doe</td>
+                <td><button class="btn btn-ghost btn-sm" onclick="viewAsset('COM-001')">View</button></td>
+              </tr>
+              <tr data-status="available">
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="font-size:22px">🍎</div><div><div style="font-weight:600">MacBook Pro</div><div style="font-size:11px;color:var(--text2)">Supplier: Apple Authorized</div></div></div></td>
+                <td><code style="background:var(--bg);padding:2px 6px;border-radius:5px;font-size:11px">COM-002</code></td>
+                <td><span class="badge badge-blue">Computer</span></td>
+                <td style="font-weight:600">Rs. 450,000</td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 195,750</td>
+                <td><span class="badge badge-green">Available</span></td>
+                <td><span style="color:var(--text3)">—</span></td>
+                <td><button class="btn btn-ghost btn-sm" onclick="viewAsset('COM-002')">View</button></td>
+              </tr>
+              <tr data-status="available">
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="font-size:22px">🚐</div><div><div style="font-weight:600">Nissan Van</div><div style="font-size:11px;color:var(--text2)">Supplier: Nissan Lanka</div></div></div></td>
+                <td><code style="background:var(--bg);padding:2px 6px;border-radius:5px;font-size:11px">VEH-002</code></td>
+                <td><span class="badge badge-purple">Vehicle</span></td>
+                <td style="font-weight:600">Rs. 4,200,000</td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 2,100,000</td>
+                <td><span class="badge badge-green">Available</span></td>
+                <td><span style="color:var(--text3)">—</span></td>
+                <td><button class="btn btn-ghost btn-sm" onclick="viewAsset('VEH-002')">View</button></td>
+              </tr>
+              <tr data-status="available">
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="font-size:22px">📽️</div><div><div style="font-weight:600">Epson Projector</div><div style="font-size:11px;color:var(--text2)">Supplier: Epson Sri Lanka</div></div></div></td>
+                <td><code style="background:var(--bg);padding:2px 6px;border-radius:5px;font-size:11px">EQU-001</code></td>
+                <td><span class="badge badge-gray">Equipment</span></td>
+                <td style="font-weight:600">Rs. 120,000</td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 82,000</td>
+                <td><span class="badge badge-green">Available</span></td>
+                <td><span style="color:var(--text3)">—</span></td>
+                <td><button class="btn btn-ghost btn-sm">View</button></td>
+              </tr>
+              <tr data-status="assigned">
+                <td><div style="display:flex;align-items:center;gap:10px"><div style="font-size:22px">🪑</div><div><div style="font-weight:600">Executive Chair</div><div style="font-size:11px;color:var(--text2)">Supplier: Damro</div></div></div></td>
+                <td><code style="background:var(--bg);padding:2px 6px;border-radius:5px;font-size:11px">FUR-001</code></td>
+                <td><span class="badge badge-gray">Furniture</span></td>
+                <td style="font-weight:600">Rs. 45,000</td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 38,250</td>
+                <td><span class="badge badge-amber">Assigned</span></td>
+                <td>Saman Kumara</td>
+                <td><button class="btn btn-ghost btn-sm">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ EMPLOYEES ============ -->
+    <div class="page" id="page-employees">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-emp-modal')">+ Add Employee</button>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)">
+            <div class="avatar" style="width:44px;height:44px;border-radius:12px;font-size:15px">AD</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:14px">Admin User</div>
+              <div style="font-size:12px;color:var(--text2)">admin@company.com · IT</div>
+            </div>
+            <span class="badge badge-purple">Admin</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)">
+            <div class="avatar" style="width:44px;height:44px;border-radius:12px;font-size:15px;background:linear-gradient(135deg,#14B8A6,#0D9488)">JD</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:14px">John Doe</div>
+              <div style="font-size:12px;color:var(--text2)">john@company.com · Sales</div>
+            </div>
+            <span class="badge badge-gray">Staff</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)">
+            <div class="avatar" style="width:44px;height:44px;border-radius:12px;font-size:15px;background:linear-gradient(135deg,#F59E0B,#D97706)">JS</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:14px">Jane Smith</div>
+              <div style="font-size:12px;color:var(--text2)">jane@company.com · Operations</div>
+            </div>
+            <span class="badge badge-blue">Manager</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 0">
+            <div class="avatar" style="width:44px;height:44px;border-radius:12px;font-size:15px;background:linear-gradient(135deg,#F43F5E,#E11D48)">SK</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:14px">Saman Kumara</div>
+              <div style="font-size:12px;color:var(--text2)">saman@company.com · IT</div>
+            </div>
+            <span class="badge badge-gray">Staff</span>
+          </div>
+        </div>
+
+        <!-- Asset assignments panel -->
+        <div class="card">
+          <div class="section-title" style="margin-bottom:16px">Asset Assignments</div>
+          <div class="asset-row">
+            <div class="asset-thumb" style="background:#EEF2FF">🚗</div>
+            <div class="asset-info">
+              <div class="asset-name">Toyota Hilux (VEH-001)</div>
+              <div class="asset-meta">Assigned to Jane Smith · since Jan 2022</div>
+            </div>
+            <div>
+              <div class="asset-value">Rs. 1.53M</div>
+              <div class="asset-value-sub">Current value</div>
+            </div>
+          </div>
+          <div class="asset-row">
+            <div class="asset-thumb" style="background:#DBEAFE">💻</div>
+            <div class="asset-info">
+              <div class="asset-name">Dell XPS Laptop (COM-001)</div>
+              <div class="asset-meta">Assigned to John Doe · since Mar 2023</div>
+            </div>
+            <div>
+              <div class="asset-value">Rs. 87.5K</div>
+              <div class="asset-value-sub">Current value</div>
+            </div>
+          </div>
+          <div class="asset-row">
+            <div class="asset-thumb" style="background:#F1F5F9">🪑</div>
+            <div class="asset-info">
+              <div class="asset-name">Executive Chair (FUR-001)</div>
+              <div class="asset-meta">Assigned to Saman Kumara · since Dec 2023</div>
+            </div>
+            <div>
+              <div class="asset-value">Rs. 38.3K</div>
+              <div class="asset-value-sub">Current value</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ MAINTENANCE ============ -->
+    <div class="page" id="page-maintenance">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-maint-modal')">+ Log Maintenance</button>
+      </div>
+      <div class="grid-2">
+        <!-- Upcoming -->
+        <div class="card">
+          <div class="section-header">
+            <div>
+              <div class="section-title">Upcoming / Overdue</div>
+              <div class="section-sub">Sorted by urgency</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Asset</th><th>Due Date</th><th>Days</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><div style="font-weight:600;font-size:13px">🚐 Nissan Van</div><div style="font-size:11px;color:var(--text2)">VEH-002</div></td>
+                  <td style="font-size:12px">Jan 15, 2024</td>
+                  <td><span style="font-weight:700;color:var(--rose)">–148 days</span></td>
+                  <td><span class="badge badge-red">Overdue</span></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:13px">🚗 Toyota Hilux</div><div style="font-size:11px;color:var(--text2)">VEH-001</div></td>
+                  <td style="font-size:12px">Jul 10, 2024</td>
+                  <td><span style="font-weight:700;color:var(--amber)">–32 days</span></td>
+                  <td><span class="badge badge-amber">Due Soon</span></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:13px">💻 Dell XPS</div><div style="font-size:11px;color:var(--text2)">COM-001</div></td>
+                  <td style="font-size:12px">Aug 15, 2024</td>
+                  <td><span style="font-weight:700;color:var(--emerald)">+16 days</span></td>
+                  <td><span class="badge badge-green">On Track</span></td>
+                </tr>
+                <tr>
+                  <td><div style="font-weight:600;font-size:13px">📽️ Epson Projector</div><div style="font-size:11px;color:var(--text2)">EQU-001</div></td>
+                  <td style="font-size:12px">Feb 12, 2025</td>
+                  <td><span style="font-weight:700;color:var(--emerald)">+180 days</span></td>
+                  <td><span class="badge badge-green">Scheduled</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="card">
+          <div class="section-header">
+            <div class="section-title">Maintenance History</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Date</th><th>Asset</th><th>Type</th><th>Cost</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td style="font-size:12px;color:var(--text2)">Jan 10, 2024</td>
+                  <td><div style="font-weight:600;font-size:13px">Toyota Hilux</div></td>
+                  <td><span class="badge badge-blue">Routine</span></td>
+                  <td style="font-weight:700">Rs. 25,000</td>
+                </tr>
+                <tr>
+                  <td style="font-size:12px;color:var(--text2)">Feb 15, 2024</td>
+                  <td><div style="font-weight:600;font-size:13px">Dell XPS</div></td>
+                  <td><span class="badge badge-amber">Repair</span></td>
+                  <td style="font-weight:700">Rs. 5,000</td>
+                </tr>
+                <tr>
+                  <td style="font-size:12px;color:var(--text2)">Mar 22, 2024</td>
+                  <td><div style="font-weight:600;font-size:13px">Epson Projector</div></td>
+                  <td><span class="badge badge-blue">Routine</span></td>
+                  <td style="font-weight:700">Rs. 3,500</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:12px;color:var(--text2)">Total maintenance spend YTD</span>
+            <span style="font-weight:800;font-size:16px;color:var(--text)">Rs. 33,500</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ REQUESTS ============ -->
+    <div class="page" id="page-requests">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:20px">
+        <button class="btn btn-primary btn-sm" onclick="openModal('add-req-modal')">+ New Request</button>
+      </div>
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Requested By</th><th>Category</th><th>Urgency</th><th>Justification</th><th>AI Prediction</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:700;color:var(--text2)">#001</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;border-radius:8px;font-size:10px;background:linear-gradient(135deg,#F43F5E,#E11D48)">SK</div><div><div style="font-weight:600;font-size:13px">Saman Kumara</div><div style="font-size:11px;color:var(--text2)">IT Dept</div></div></div></td>
+                <td><span class="badge badge-blue">Laptop</span></td>
+                <td><span class="badge badge-red">🔴 High</span></td>
+                <td style="font-size:12px;color:var(--text2);max-width:160px">Current laptop too slow for dev work</td>
+                <td>
+                  <div style="font-size:11px;color:var(--emerald);font-weight:600">80% likely approved</div>
+                  <div style="font-size:10px;color:var(--text3)">Est. 2 days</div>
+                </td>
+                <td><span class="badge badge-amber">Pending</span></td>
+                <td style="display:flex;gap:6px;padding-top:12px">
+                  <button class="btn btn-sm" style="background:#D1FAE5;color:#065F46;border:none;font-size:11px" onclick="approveRequest(this)">Approve</button>
+                  <button class="btn btn-sm" style="background:#FEE2E2;color:#991B1B;border:none;font-size:11px">Reject</button>
+                </td>
+              </tr>
+              <tr>
+                <td style="font-weight:700;color:var(--text2)">#002</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div class="avatar" style="width:28px;height:28px;border-radius:8px;font-size:10px;background:linear-gradient(135deg,#F59E0B,#D97706)">JS</div><div><div style="font-weight:600;font-size:13px">Jane Smith</div><div style="font-size:11px;color:var(--text2)">Operations</div></div></div></td>
+                <td><span class="badge badge-purple">Vehicle</span></td>
+                <td><span class="badge badge-amber">🟡 Normal</span></td>
+                <td style="font-size:12px;color:var(--text2);max-width:160px">Additional vehicle for deliveries</td>
+                <td>
+                  <div style="font-size:11px;color:var(--amber);font-weight:600">50% possible</div>
+                  <div style="font-size:10px;color:var(--text3)">Est. 5 days</div>
+                </td>
+                <td><span class="badge badge-green">Approved</span></td>
+                <td style="padding-top:12px"><button class="btn btn-ghost btn-sm">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ PROCUREMENT ============ -->
+    <div class="page" id="page-procurement">
+      <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:24px">
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--indigo)"></div>
+          <div class="kpi-header"><div class="kpi-icon-wrap" style="background:#EEF2FF">🧾</div><span class="kpi-trend up">+8%</span></div>
+          <div class="kpi-value">Rs. 5.4M</div>
+          <div class="kpi-label">Procurement Budget</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--emerald)"></div>
+          <div class="kpi-header"><div class="kpi-icon-wrap" style="background:#D1FAE5">📦</div><span class="kpi-trend up">+4</span></div>
+          <div class="kpi-value">14</div>
+          <div class="kpi-label">Open POs</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--amber)"></div>
+          <div class="kpi-header"><div class="kpi-icon-wrap" style="background:#FEF3C7">🚚</div><span class="kpi-trend neutral">3 delayed</span></div>
+          <div class="kpi-value">7</div>
+          <div class="kpi-label">In Transit</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--rose)"></div>
+          <div class="kpi-header"><div class="kpi-icon-wrap" style="background:#FFF1F2">⚠️</div><span class="kpi-trend down">2 risks</span></div>
+          <div class="kpi-value">4</div>
+          <div class="kpi-label">Supplier Alerts</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="section-header">
+            <div>
+              <div class="section-title">Procurement Pipeline</div>
+              <div class="section-sub">Latest purchase orders and delivery status</div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>PO #</th><th>Vendor</th><th>Item</th><th>Amount</th><th>ETA</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:700">PO-1048</td>
+                  <td>HP Sri Lanka</td>
+                  <td>12 laptops</td>
+                  <td>Rs. 1.9M</td>
+                  <td>Jun 18</td>
+                  <td><span class="badge badge-amber">In Transit</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:700">PO-1049</td>
+                  <td>Canon Lanka</td>
+                  <td>Projector + accessories</td>
+                  <td>Rs. 640K</td>
+                  <td>Jun 20</td>
+                  <td><span class="badge badge-green">Ready to Receive</span></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:700">PO-1050</td>
+                  <td>Toyota Lanka</td>
+                  <td>Fleet service contract</td>
+                  <td>Rs. 2.1M</td>
+                  <td>Jul 02</td>
+                  <td><span class="badge badge-blue">Approved</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="section-header">
+            <div>
+              <div class="section-title">Supplier Performance</div>
+              <div class="section-sub">On-time delivery and service quality</div>
+            </div>
+          </div>
+          <div class="asset-row">
+            <div class="asset-thumb" style="background:#EEF2FF">🏢</div>
+            <div class="asset-info">
+              <div class="asset-name">HP Sri Lanka</div>
+              <div class="asset-meta">98% on-time delivery · 4.8/5 service</div>
+            </div>
+            <div class="badge badge-green">Excellent</div>
+          </div>
+          <div class="asset-row">
+            <div class="asset-thumb" style="background:#DBEAFE">🚚</div>
+            <div class="asset-info">
+              <div class="asset-name">Toyota Lanka</div>
+              <div class="asset-meta">86% SLA compliance · 2 late deliveries</div>
+            </div>
+            <div class="badge badge-amber">Watchlist</div>
+          </div>
+          <div class="asset-row" style="border-bottom:none">
+            <div class="asset-thumb" style="background:#F1F5F9">🧰</div>
+            <div class="asset-info">
+              <div class="asset-name">Industrial Supply Co.</div>
+              <div class="asset-meta">92% fulfillment · 1 quality issue</div>
+            </div>
+            <div class="badge badge-blue">Stable</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:20px">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Budget vs. Spend</div>
+            <div class="section-sub">Current quarter procurement allocation</div>
+          </div>
+        </div>
+        <div class="bar-chart" id="procurement-bar-chart">
+          <div class="bar-col"><div class="bar-val">Rs. 1.1M</div><div class="bar" style="height:52px;background:#C7D2FE"></div><div class="bar-label">Q1</div></div>
+          <div class="bar-col"><div class="bar-val">Rs. 1.6M</div><div class="bar" style="height:75px;background:#A5B4FC"></div><div class="bar-label">Q2</div></div>
+          <div class="bar-col"><div class="bar-val">Rs. 2.0M</div><div class="bar" style="height:100px;background:var(--indigo)"></div><div class="bar-label">Q3</div></div>
+          <div class="bar-col"><div class="bar-val">Rs. 1.4M</div><div class="bar" style="height:68px;background:#E0E7FF"></div><div class="bar-label">Q4</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ REPORTS ============ -->
+    <div class="page" id="page-reports">
+      <!-- Summary Cards -->
+      <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px">
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--indigo)"></div>
+          <div class="kpi-header"><div class="kpi-icon-wrap" style="background:#EEF2FF">💰</div></div>
+          <div class="kpi-value">Rs. 13.6M</div>
+          <div class="kpi-label">Total Purchase Cost</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--emerald)"></div>
+          <div class="kpi-header"><div class="kpi-icon-wrap" style="background:#D1FAE5">📉</div></div>
+          <div class="kpi-value">Rs. 2.8M</div>
+          <div class="kpi-label">Total Depreciation</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-accent" style="background:var(--rose)"></div>
+          <div class="kpi-header"><div class="kpi-icon-wrap" style="background:#FFF1F2">⚠️</div></div>
+          <div class="kpi-value">3</div>
+          <div class="kpi-label">Assets for Replacement</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Category report table -->
+        <div class="card">
+          <div class="section-title" style="margin-bottom:16px">Asset Value by Category</div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Category</th><th>Count</th><th>Purchase Cost</th><th>Current Value</th><th>Depreciation</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:6px;font-weight:600">🚗 Vehicles</div></td>
+                  <td><span class="badge badge-gray">2</span></td>
+                  <td>Rs. 12.7M</td>
+                  <td style="font-weight:700;color:var(--indigo)">Rs. 3.63M</td>
+                  <td style="color:var(--rose);font-weight:600">Rs. 9.07M</td>
+                </tr>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:6px;font-weight:600">💻 Computers</div></td>
+                  <td><span class="badge badge-gray">2</span></td>
+                  <td>Rs. 700K</td>
+                  <td style="font-weight:700;color:var(--indigo)">Rs. 283K</td>
+                  <td style="color:var(--rose);font-weight:600">Rs. 417K</td>
+                </tr>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:6px;font-weight:600">🔧 Equipment</div></td>
+                  <td><span class="badge badge-gray">1</span></td>
+                  <td>Rs. 120K</td>
+                  <td style="font-weight:700;color:var(--indigo)">Rs. 82K</td>
+                  <td style="color:var(--rose);font-weight:600">Rs. 38K</td>
+                </tr>
+                <tr>
+                  <td><div style="display:flex;align-items:center;gap:6px;font-weight:600">🪑 Furniture</div></td>
+                  <td><span class="badge badge-gray">1</span></td>
+                  <td>Rs. 45K</td>
+                  <td style="font-weight:700;color:var(--indigo)">Rs. 38.3K</td>
+                  <td style="color:var(--rose);font-weight:600">Rs. 6.7K</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Monthly maintenance costs bar chart -->
+        <div class="card">
+          <div class="section-title" style="margin-bottom:20px">Monthly Maintenance Cost</div>
+          <div class="bar-chart" id="maint-bar-chart">
+            <div class="bar-col"><div class="bar-val">8K</div><div class="bar" style="height:40px;background:#EEF2FF"></div><div class="bar-label">Jan</div></div>
+            <div class="bar-col"><div class="bar-val">15K</div><div class="bar" style="height:65px;background:#C7D2FE"></div><div class="bar-label">Feb</div></div>
+            <div class="bar-col"><div class="bar-val">5K</div><div class="bar" style="height:25px;background:#EEF2FF"></div><div class="bar-label">Mar</div></div>
+            <div class="bar-col"><div class="bar-val">25K</div><div class="bar" style="height:100px;background:var(--indigo)"></div><div class="bar-label">Apr</div></div>
+            <div class="bar-col"><div class="bar-val">12K</div><div class="bar" style="height:52px;background:#C7D2FE"></div><div class="bar-label">May</div></div>
+            <div class="bar-col"><div class="bar-val">3K</div><div class="bar" style="height:15px;background:#EEF2FF"></div><div class="bar-label">Jun</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Replacement candidates -->
+      <div class="card" style="margin-top:20px">
+        <div class="section-header">
+          <div>
+            <div class="section-title">🔴 Assets Recommended for Replacement</div>
+            <div class="section-sub">Based on value retained and maintenance cost ratio</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Asset</th><th>Original Value</th><th>Current Value</th><th>Value Retained</th><th>Reason</th><th>Budget Needed</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div style="font-weight:600">🚗 Toyota Hilux (VEH-001)</div></td>
+                <td>Rs. 8,500,000</td>
+                <td style="color:var(--rose);font-weight:700">Rs. 1,530,000</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:var(--border);border-radius:3px"><div style="width:18%;height:100%;background:var(--rose);border-radius:3px"></div></div><span style="font-size:12px;font-weight:700;color:var(--rose)">18%</span></div></td>
+                <td style="font-size:12px;color:var(--text2)">Below 20% retained value</td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 6,800,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ DEPRECIATION ============ -->
+    <div class="page" id="page-depreciation">
+      <div class="card" style="margin-bottom:20px">
+        <div class="section-title" style="margin-bottom:16px">Depreciation Calculator</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Asset</label>
+            <select id="dep-asset" onchange="calcDepreciation()">
+              <option value="8500000,25">Toyota Hilux — Rs. 8,500,000 (25%/yr)</option>
+              <option value="250000,30">Dell XPS Laptop — Rs. 250,000 (30%/yr)</option>
+              <option value="450000,30">MacBook Pro — Rs. 450,000 (30%/yr)</option>
+              <option value="4200000,25">Nissan Van — Rs. 4,200,000 (25%/yr)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Method</label>
+            <select id="dep-method" onchange="calcDepreciation()">
+              <option value="straight">Straight Line</option>
+              <option value="declining">Double Declining Balance</option>
+              <option value="usage">Usage Based (5yr life)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Years elapsed</label>
+            <input type="range" id="dep-years" min="0" max="10" value="2" step="1" oninput="document.getElementById('dep-years-out').textContent=this.value+' yrs';calcDepreciation()" style="padding:0;height:auto;border:none;box-shadow:none">
+          </div>
+          <div class="form-group" style="justify-content:flex-end">
+            <label>Years: <span id="dep-years-out" style="color:var(--indigo);font-weight:700">2 yrs</span></label>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px">
+          <div style="background:var(--bg);border-radius:var(--radius);padding:16px;text-align:center">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.4px">Purchase Price</div>
+            <div style="font-size:22px;font-weight:800;color:var(--text)" id="dep-original">Rs. 8,500,000</div>
+          </div>
+          <div style="background:var(--bg);border-radius:var(--radius);padding:16px;text-align:center">
+            <div style="font-size:11px;color:var(--text2);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.4px">Current Value</div>
+            <div style="font-size:22px;font-weight:800;color:var(--indigo)" id="dep-current">Rs. 5,100,000</div>
+          </div>
+          <div style="background:#FFF1F2;border-radius:var(--radius);padding:16px;text-align:center">
+            <div style="font-size:11px;color:#991B1B;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.4px">Depreciated</div>
+            <div style="font-size:22px;font-weight:800;color:var(--rose)" id="dep-lost">Rs. 3,400,000</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-title" style="margin-bottom:16px">All Assets — Current Book Values</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Asset</th><th>Purchase Cost</th><th>Purchase Date</th><th>Method</th><th>Current Value</th><th>% Retained</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><div style="font-weight:600">🚗 Toyota Hilux</div></td>
+                <td>Rs. 8,500,000</td>
+                <td style="color:var(--text2);font-size:12px">Jan 15, 2022</td>
+                <td><span class="badge badge-gray">Usage Based</span></td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 1,530,000</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:var(--border);border-radius:3px"><div style="width:18%;height:100%;background:var(--rose);border-radius:3px"></div></div><span style="font-size:12px;font-weight:600;color:var(--rose)">18%</span></div></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600">💻 Dell XPS</div></td>
+                <td>Rs. 250,000</td>
+                <td style="color:var(--text2);font-size:12px">Mar 10, 2023</td>
+                <td><span class="badge badge-blue">Double Declining</span></td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 87,500</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:var(--border);border-radius:3px"><div style="width:35%;height:100%;background:var(--amber);border-radius:3px"></div></div><span style="font-size:12px;font-weight:600;color:var(--amber)">35%</span></div></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600">🍎 MacBook Pro</div></td>
+                <td>Rs. 450,000</td>
+                <td style="color:var(--text2);font-size:12px">Jun 20, 2023</td>
+                <td><span class="badge badge-blue">Double Declining</span></td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 195,750</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:var(--border);border-radius:3px"><div style="width:43%;height:100%;background:var(--amber);border-radius:3px"></div></div><span style="font-size:12px;font-weight:600;color:var(--amber)">43%</span></div></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600">🚐 Nissan Van</div></td>
+                <td>Rs. 4,200,000</td>
+                <td style="color:var(--text2);font-size:12px">Nov 5, 2021</td>
+                <td><span class="badge badge-gray">Usage Based</span></td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 2,100,000</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:var(--border);border-radius:3px"><div style="width:50%;height:100%;background:var(--emerald);border-radius:3px"></div></div><span style="font-size:12px;font-weight:600;color:var(--emerald)">50%</span></div></td>
+              </tr>
+              <tr>
+                <td><div style="font-weight:600">🪑 Executive Chair</div></td>
+                <td>Rs. 45,000</td>
+                <td style="color:var(--text2);font-size:12px">Dec 1, 2023</td>
+                <td><span class="badge badge-gray">Straight Line</span></td>
+                <td style="font-weight:700;color:var(--indigo)">Rs. 38,250</td>
+                <td><div style="display:flex;align-items:center;gap:8px"><div style="flex:1;height:5px;background:var(--border);border-radius:3px"><div style="width:85%;height:100%;background:var(--emerald);border-radius:3px"></div></div><span style="font-size:12px;font-weight:600;color:var(--emerald)">85%</span></div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- ============ MODALS ============ -->
+
+<!-- Add Asset Modal -->
+<div class="modal-overlay" id="add-asset-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add New Asset</div>
+      <button class="modal-close" onclick="closeModal('add-asset-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Asset Name</label>
+        <input type="text" placeholder="e.g. HP EliteBook 840">
+      </div>
+      <div class="form-group">
+        <label>Asset Code</label>
+        <input type="text" placeholder="e.g. COM-003">
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select>
+          <option>Vehicle</option><option>Computer</option><option>Equipment</option><option>Furniture</option><option>Electronics</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Purchase Cost (Rs.)</label>
+        <input type="number" placeholder="e.g. 280000">
+      </div>
+      <div class="form-group">
+        <label>Purchase Date</label>
+        <input type="date">
+      </div>
+      <div class="form-group">
+        <label>Supplier</label>
+        <input type="text" placeholder="e.g. HP Sri Lanka">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select><option>available</option><option>assigned</option><option>maintenance</option></select>
+      </div>
+      <div class="form-group">
+        <label>Assign To</label>
+        <select><option value="">— Unassigned —</option><option>John Doe</option><option>Jane Smith</option><option>Saman Kumara</option></select>
+      </div>
+      <div class="form-group form-full">
+        <label>Notes</label>
+        <textarea rows="2" placeholder="Optional notes…"></textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px">
+      <button class="btn btn-ghost" onclick="closeModal('add-asset-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAsset()">Save Asset</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Maintenance Modal -->
+<div class="modal-overlay" id="add-maint-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Log Maintenance Record</div>
+      <button class="modal-close" onclick="closeModal('add-maint-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Asset</label>
+        <select><option>Toyota Hilux (VEH-001)</option><option>Dell XPS (COM-001)</option><option>Nissan Van (VEH-002)</option></select>
+      </div>
+      <div class="form-group">
+        <label>Type</label>
+        <select><option>routine</option><option>repair</option><option>emergency</option></select>
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date">
+      </div>
+      <div class="form-group">
+        <label>Cost (Rs.)</label>
+        <input type="number" placeholder="e.g. 15000">
+      </div>
+      <div class="form-group">
+        <label>Performed By</label>
+        <input type="text" placeholder="e.g. Toyota Service Center">
+      </div>
+      <div class="form-group">
+        <label>Next Due Date</label>
+        <input type="date">
+      </div>
+      <div class="form-group form-full">
+        <label>Description</label>
+        <textarea rows="2" placeholder="Describe work performed…"></textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px">
+      <button class="btn btn-ghost" onclick="closeModal('add-maint-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('add-maint-modal');showToast('Maintenance record saved')">Save Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Request Modal -->
+<div class="modal-overlay" id="add-req-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Submit Asset Request</div>
+      <button class="modal-close" onclick="closeModal('add-req-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Asset Category</label>
+        <select><option>Laptop</option><option>Vehicle</option><option>Equipment</option><option>Phone</option></select>
+      </div>
+      <div class="form-group">
+        <label>Urgency</label>
+        <select><option>low</option><option>normal</option><option>high</option><option>urgent</option></select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Date</label>
+        <input type="date">
+      </div>
+      <div class="form-group">
+        <label>Department</label>
+        <select><option>IT</option><option>Sales</option><option>Operations</option><option>Admin</option></select>
+      </div>
+      <div class="form-group form-full">
+        <label>Justification</label>
+        <textarea rows="3" placeholder="Explain why this asset is needed…"></textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px">
+      <button class="btn btn-ghost" onclick="closeModal('add-req-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('add-req-modal');showToast('Request submitted for review')">Submit Request</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Employee Modal -->
+<div class="modal-overlay" id="add-emp-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Add Employee</div>
+      <button class="modal-close" onclick="closeModal('add-emp-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" placeholder="e.g. Nimal Perera">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="e.g. nimal@company.com">
+      </div>
+      <div class="form-group">
+        <label>Role</label>
+        <select><option>staff</option><option>manager</option><option>admin</option></select>
+      </div>
+      <div class="form-group">
+        <label>Department</label>
+        <select><option>IT</option><option>Sales</option><option>Operations</option><option>Admin</option></select>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px">
+      <button class="btn btn-ghost" onclick="closeModal('add-emp-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeModal('add-emp-modal');showToast('Employee added successfully')">Add Employee</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" style="position:fixed;bottom:24px;right:24px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:var(--radius);font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);transform:translateY(80px);opacity:0;transition:.3s;z-index:999;display:flex;align-items:center;gap:8px">
+  <span style="color:var(--emerald)">✓</span> <span id="toast-msg">Saved</span>
+</div>
+
+<script>
+const pages = {
+  dashboard:{title:'Dashboard',sub:'Overview of your asset portfolio'},
+  assets:{title:'Assets',sub:'Manage and track all company assets'},
+  employees:{title:'Employees',sub:'Staff and asset assignments'},
+  procurement:{title:'Procurement',sub:'Vendor tracking and budget planning'},
+  maintenance:{title:'Maintenance',sub:'Schedule and history'},
+  requests:{title:'Asset Requests',sub:'Pending approvals and submitted requests'},
+  reports:{title:'Reports & Analytics',sub:'Financial summaries and insights'},
+  depreciation:{title:'Depreciation',sub:'Asset value tracking over time'}
+};
+
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  document.getElementById('topbar-title').textContent=pages[id]?.title||id;
+  document.getElementById('topbar-sub').textContent=pages[id]?.sub||'';
+}
+
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+
+document.querySelectorAll('.modal-overlay').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')})
+});
+
+function applyTheme(theme){
+  const isDark = theme === 'dark';
+  document.body.classList.toggle('dark-mode', isDark);
+  const themeIcon = document.getElementById('theme-icon');
+  const themeLabel = document.getElementById('theme-label');
+  if(themeIcon) themeIcon.textContent = isDark ? '☀️' : '🌙';
+  if(themeLabel) themeLabel.textContent = isDark ? 'Light' : 'Dark';
+  try { localStorage.setItem('assetflow-theme', theme); } catch (e) {}
+}
+
+function toggleTheme(){
+  const nextTheme = document.body.classList.contains('dark-mode') ? 'light' : 'dark';
+  applyTheme(nextTheme);
+}
+
+const savedTheme = (() => {
+  try { return localStorage.getItem('assetflow-theme') || 'light'; }
+  catch (e) { return 'light'; }
+})();
+applyTheme(savedTheme);
+
+const notifications = [
+  {
+    id: 1,
+    title: 'Maintenance overdue',
+    text: 'Toyota Hilux requires a service review before the next fleet inspection cycle.',
+    meta: 'Asset Operations • 2 mins ago',
+    severity: 'high',
+    emoji: '🚗',
+    unread: true,
+    action: 'Check service schedule and assign a mechanic.'
+  },
+  {
+    id: 2,
+    title: 'Purchase order approved',
+    text: 'HP Sri Lanka order PO-1048 has been approved and is currently in transit.',
+    meta: 'Procurement • 1 hour ago',
+    severity: 'low',
+    emoji: '🧾',
+    unread: true,
+    action: 'Track delivery and confirm receipt date.'
+  },
+  {
+    id: 3,
+    title: 'Asset request pending review',
+    text: 'Saman Kumara submitted a laptop request with high urgency and 80% approval probability.',
+    meta: 'Requests • 3 hours ago',
+    severity: 'medium',
+    emoji: '📋',
+    unread: true,
+    action: 'Validate business need and finalize approval.'
+  },
+  {
+    id: 4,
+    title: 'Warranty alert',
+    text: 'Dell XPS Laptop warranty coverage will expire in 12 days. Action recommended.',
+    meta: 'Asset Health • Yesterday',
+    severity: 'medium',
+    emoji: '💻',
+    unread: false,
+    action: 'Review renewal or extended support options.'
+  },
+  {
+    id: 5,
+    title: 'Budget threshold warning',
+    text: 'Current procurement spending reached 72% of the quarterly budget cap.',
+    meta: 'Finance • 2 days ago',
+    severity: 'high',
+    emoji: '💰',
+    unread: false,
+    action: 'Review new requisitions before approving further purchases.'
+  }
+];
+
+function renderNotifications(){
+  const panel = document.getElementById('notification-list');
+  if(!panel) return;
+  const unreadCount = notifications.filter(n => n.unread).length;
+  document.getElementById('notification-summary').textContent = unreadCount + ' unread';
+  panel.innerHTML = notifications.map(item => `
+    <div class="notif-item ${item.unread ? 'unread' : ''}" onclick="openNotification(${item.id})">
+      <div class="notif-emoji" style="background:${item.severity === 'high' ? '#FEE2E2' : item.severity === 'medium' ? '#FEF3C7' : '#DCFCE7'}">${item.emoji}</div>
+      <div class="notif-item-content">
+        <div class="notif-item-title">${item.title}</div>
+        <div class="notif-item-text">${item.text}</div>
+        <div class="notif-item-meta">
+          <span>${item.meta}</span>
+          <span class="notif-severity ${item.severity}">${item.severity}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleNotifications(event){
+  const panel = document.getElementById('notification-panel');
+  if(!panel) return;
+  const shouldOpen = !panel.classList.contains('open');
+  panel.classList.toggle('open', shouldOpen);
+  if(event) event.stopPropagation();
+}
+
+function closeNotifications(){
+  const panel = document.getElementById('notification-panel');
+  if(panel) panel.classList.remove('open');
+}
+
+function openNotification(id){
+  const item = notifications.find(n => n.id === id);
+  if(!item) return;
+  const modal = document.getElementById('notification-modal-overlay');
+  if(!modal) return;
+  document.getElementById('popup-title').textContent = item.title;
+  document.getElementById('popup-meta').textContent = item.meta;
+  document.getElementById('popup-message').textContent = item.action + ' ' + item.text;
+  const severityEl = document.getElementById('popup-severity');
+  severityEl.textContent = item.severity.toUpperCase() + ' PRIORITY';
+  severityEl.className = 'notification-badge ' + item.severity;
+  item.unread = false;
+  renderNotifications();
+  modal.classList.add('open');
+}
+
+function closeNotificationModal(){
+  const modal = document.getElementById('notification-modal-overlay');
+  if(modal) modal.classList.remove('open');
+}
+
+function markAllRead(){
+  notifications.forEach(n => n.unread = false);
+  renderNotifications();
+  showToast('All notifications marked as read');
+}
+
+document.addEventListener('click', (event) => {
+  const panel = document.getElementById('notification-panel');
+  const bell = document.getElementById('notif-btn');
+  const clickedInsidePanel = panel && panel.contains(event.target);
+  const clickedBell = bell && bell.contains(event.target);
+  if(!clickedInsidePanel && !clickedBell) closeNotifications();
+});
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.style.transform='translateY(0)';t.style.opacity='1';
+  setTimeout(()=>{t.style.transform='translateY(80px)';t.style.opacity='0'},3000);
+}
+
+renderNotifications();
+
+function saveAsset(){
+  closeModal('add-asset-modal');
+  showToast('Asset saved successfully');
+}
+
+function approveRequest(btn){
+  const row=btn.closest('tr');
+  row.querySelector('.badge').className='badge badge-green';
+  row.querySelector('.badge').textContent='Approved';
+  btn.parentElement.innerHTML='<span style="font-size:12px;color:var(--emerald);font-weight:600">Approved ✓</span>';
+  showToast('Request approved');
+}
+
+function filterAssets(status,el){
+  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#assets-tbody tr').forEach(row=>{
+    row.style.display=(status==='all'||row.dataset.status===status)?'':'none';
+  });
+}
+
+function handleSearch(val){
+  const v=val.toLowerCase();
+  document.querySelectorAll('#assets-tbody tr').forEach(row=>{
+    row.style.display=row.textContent.toLowerCase().includes(v)?'':'none';
+  });
+}
+
+function viewAsset(code){
+  showToast('Viewing asset: '+code);
+}
+
+function calcDepreciation(){
+  const sel=document.getElementById('dep-asset').value.split(',');
+  const cost=parseFloat(sel[0]),rate=parseFloat(sel[1])/100;
+  const years=parseInt(document.getElementById('dep-years').value);
+  const method=document.getElementById('dep-method').value;
+  let val;
+  if(method==='straight')val=cost*(1-rate*years);
+  else if(method==='declining')val=cost*Math.pow(1-rate*2,years);
+  else val=cost*(1-years/5);
+  val=Math.max(0,val);
+  const fmt=v=>'Rs. '+Math.round(v).toLocaleString();
+  document.getElementById('dep-original').textContent=fmt(cost);
+  document.getElementById('dep-current').textContent=fmt(val);
+  document.getElementById('dep-lost').textContent=fmt(cost-val);
+}
+
+// Animate progress bars on load
+setTimeout(()=>{
+  document.querySelectorAll('.progress-fill').forEach(el=>{
+    const w=el.style.width;el.style.width='0';
+    requestAnimationFrame(()=>{setTimeout(()=>{el.style.width=w},50)});
+  });
+},200);
+</script>
+</body>
+</html>
